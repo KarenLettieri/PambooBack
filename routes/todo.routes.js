@@ -16,7 +16,6 @@ todosRouter.get("/", async (req, res) => {
   todosRouter.post("/addtodo", async (req, res) => {
     //Como mongoose no proporciona otra forma de subir datos que no sea insertMany() se hace esta funcion
     try {
-
       let data = new TodoModel(req.body);
       await data.save();
       res.send({
@@ -30,13 +29,19 @@ todosRouter.get("/", async (req, res) => {
   });
 });
 
-todosRouter.post("/:id", (req,res) =>{
-    const {id} = req.params
-    res.send({
-        message: id
-    })
-})
+todosRouter.patch("/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
 
-module.exports={
-    todosRouter
-}
+    await TodoModel.findByIdAndUpdate({ _id: id }, req.body);
+    res.send({
+      message: "Todo updated",
+    });
+  } catch (error) {
+    res.send({ message: error.message });
+  }
+});
+
+module.exports = {
+  todosRouter,
+};
