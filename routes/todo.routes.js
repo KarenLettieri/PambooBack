@@ -42,6 +42,18 @@ todosRouter.patch("/:id", async (req, res) => {
   }
 });
 
+todosRouter.delete("/:id", async (req, res) => {
+    try {
+    const { id } = req.params;
+      await TodoModel.findByIdAndDelete({ _id: id });
+      res.send({
+        message: "Todo deleted",
+      });
+    } catch (error) {
+      res.send({ message: error.message });
+    }
+  });
+
 module.exports = {
   todosRouter,
 };
